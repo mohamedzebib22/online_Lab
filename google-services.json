@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "878372761963",
+    "project_id": "laboratory-4bdcd",
+    "storage_bucket": "laboratory-4bdcd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:878372761963:android:8dd82e638bce2e7e6edc2e",
+        "android_client_info": {
+          "package_name": "medical.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBauLhVXSizo1DeQFBru1mbLfRHiprkQPo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
