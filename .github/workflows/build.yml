@@ -1,3 +1,5 @@
+env:
+  ANDROID_HOME: C:\Android
 name: CI
 on:
   push:
