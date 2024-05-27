@@ -1,7 +1,7 @@
 [app]
 
 # (str) Title of your application
-title = onlineLab
+title = Lab
 
 # (str) Package name
 package.name = onlineLab
