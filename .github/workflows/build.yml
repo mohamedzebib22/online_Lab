@@ -5,7 +5,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       - uses: actions/checkout@v2
@@ -30,13 +30,11 @@ jobs:
 
       - name: Install Android SDK and update
         run: |
-          sudo apt-get update
-          sudo apt-get install -y openjdk-11-jdk
-          wget https://dl.google.com/android/repository/commandlinetools-linux-6858069_latest.zip
-          unzip -qq commandlinetools-linux-6858069_latest.zip -d $ANDROID_HOME/cmdline-tools
-          export PATH=$PATH:$ANDROID_HOME/cmdline-tools/tools/bin
-          yes | $ANDROID_HOME/cmdline-tools/tools/bin/sdkmanager --licenses
-          $ANDROID_HOME/cmdline-tools/tools/bin/sdkmanager "build-tools;31.0.0" "platform-tools" "platforms;android-31"
+          choco install openjdk11
+          choco install android-sdk
+          set ANDROID_HOME=C:\Android
+          echo y | %ANDROID_HOME%\tools\bin\sdkmanager.bat --licenses
+          echo y | %ANDROID_HOME%\tools\bin\sdkmanager.bat "build-tools;31.0.0" "platform-tools" "platforms;android-31"
 
       - name: Build with Buildozer
         uses: ArtemSBulgakov/buildozer-action@v1
