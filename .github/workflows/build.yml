@@ -28,6 +28,16 @@ jobs:
           path: .buildozer
           key: ${{ runner.os }}-${{ steps.get-date.outputs.date }}-${{ hashFiles('buildozer.spec') }}
 
+      - name: Install Android SDK and update
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y openjdk-11-jdk
+          wget https://dl.google.com/android/repository/commandlinetools-linux-6858069_latest.zip
+          unzip -qq commandlinetools-linux-6858069_latest.zip -d $ANDROID_HOME/cmdline-tools
+          export PATH=$PATH:$ANDROID_HOME/cmdline-tools/tools/bin
+          yes | sdkmanager --licenses
+          sdkmanager "build-tools;31.0.0" "platform-tools" "platforms;android-31"
+
       - name: Build with Buildozer
         uses: ArtemSBulgakov/buildozer-action@v1
         id: buildozer
