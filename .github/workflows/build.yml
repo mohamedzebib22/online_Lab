@@ -8,8 +8,8 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
-      - uses: actions/checkout@v2
-
+      - name: Checkout code
+        uses: actions/checkout@v2
      
       - name: Get Date
         id: get-date
@@ -21,12 +21,13 @@ jobs:
         uses: actions/cache@v2
         with:
           path: .buildozer_global
-          key: buildozer-global-${{ hashFiles('buildozer.spec') }} # Replace with your path
+          key: buildozer-global-${{ hashFiles('buildozer.spec') }} # يُقوم بتخزين .buildozer_global لتوفير الوقت في التنزيلات المتكررة
 
-      - uses: actions/cache@v2
+      - name: Cache Buildozer directory
+        uses: actions/cache@v2
         with:
           path: .buildozer
-          key: ${{ runner.os }}-${{ steps.get-date.outputs.date }}-${{ hashFiles('buildozer.spec') }}
+          key: ${{ runner.os }}-${{ steps.get-date.outputs.date }}-${{ hashFiles('buildozer.spec') }} # يُقوم بتخزين .buildozer لتوفير الوقت في التنزيلات المتكررة
 
       - name: Build with Buildozer
         uses: ArtemSBulgakov/buildozer-action@v1
@@ -39,4 +40,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: package
-          path: ${{ steps.buildozer.outputs.filename }}
+          path: ${{ steps.buildozer.outputs.filename }} # يقوم بتحميل الحزمة المنشأة بواسطة Buildozer كملف أرشيف
