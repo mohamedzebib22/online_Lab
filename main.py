@@ -80,7 +80,7 @@ class Update(Screen):
         update_grid.clear_widgets()
         try:
             email = self.manager.get_screen('login_admin').email
-            
+            print(email)
             
             # جلب المنتجات المخزنة بناءً على عنوان البريد الإلكتروني
             user_products = firestoree.collection('users').document(email).collection('products').get()
@@ -126,7 +126,7 @@ class Update(Screen):
                 #print("Update success")
                 
         except Exception as error:
-            pass
+            print(error)
             
     def update_product(self, email, analysis_name, price, document_id):
         try:
@@ -137,14 +137,14 @@ class Update(Screen):
             # تحديث الوثيقة في Firestore
             product_ref.update({"analysis_name": analysis_name, "price": price})
             
-            
+            print("Product updated successfully")
             speaker =win.Dispatch("SAPI.SPvoice")
             speaker.Speak("Product updated successfully")
             
         except Exception as error:
             speaker =win.Dispatch("SAPI.SPvoice")
             speaker.Speak("please check data")
-            
+            print(error)
     def delete_product(self, email, document_id):
         try:
             # الحصول على مرجع الوثيقة المطلوبة
@@ -152,7 +152,7 @@ class Update(Screen):
             
             # حذف الوثيقة من Firestore
             product_ref.delete()
-            
+            print("Product deleted successfully")
             speaker =win.Dispatch("SAPI.SPvoice")
             speaker.Speak("Product delete successfully")
             # إخفاء الكارد عن طريق إزالته من الشاشة
@@ -160,7 +160,7 @@ class Update(Screen):
         except Exception as error:
             speaker =win.Dispatch("SAPI.SPvoice")
             speaker.Speak("please check data")
-          
+            print(error)
             
     def search_update(self):
         search_update = self.ids.search_update.text.strip()  # الحصول على النص المدخل في حقل البحث وحذف الفراغات الزائدة
@@ -224,12 +224,12 @@ class Forgot_password_admin(Screen):
                 if user_data and user_data.get('phone_lab') == phone_lab and user_data.get('lab_name') == lab_name :
                     # Update password if email and phone match
                     user_ref.update({'password': new_password})
-                   
+                    print("Password reset successful")
                     self.manager.current = "login_user"
                 else:
-                    pass
+                    print("Email and phone do not match or user not found")
         except Exception as Er:
-            pass
+            print(Er)
            
 class Forgot_password(Screen):
 
@@ -246,12 +246,12 @@ class Forgot_password(Screen):
                 if user_data and user_data.get('phone') == phone and user_data.get('date') == date :
                     # Update password if email and phone match
                     user_ref.update({'password': new_password})
-                    
+                    print("Password reset successful")
                     self.manager.current = "login_user"
                 else:
-                    pass
+                    print("Email and phone do not match or user not found")
         except Exception as Er:
-            pass
+            print(Er)
            
     
         
@@ -314,7 +314,7 @@ class Show_Analysis(Screen):
             dollar_rate = data['rates']['EGP']
             return dollar_rate
         except Exception as e:
-            pass
+            print("Error fetching dollar rate:", e)
             return None
                 
     def create_paypal_payment(self,payment, lab_price):
@@ -323,7 +323,7 @@ class Show_Analysis(Screen):
             lab_price_float = float(lab_price)
             lab_price_usd = lab_price_float / dollar_rate 
             paypal_url = f"https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business={payment}&amount={lab_price_usd}&currency_code=USD"
-          
+            print("PayPal payment URL:", paypal_url)
             webbrowser.open(paypal_url)
             return paypal_url
         
@@ -360,9 +360,10 @@ class Show_Analysis(Screen):
                 with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
                     smtp.login(email, password)
                     smtp.send_message(msg)
+                print(f"Email sent successfully to {email_user}")
                 popup.dismiss()
             except Exception as e:
-                pass
+                print(f"Failed to send email to {email_user}: {e}")
                 
           
     def call_search_product(self):
@@ -456,7 +457,7 @@ class Show_Analysis(Screen):
         )
         # فتح رابط واتساب في المتصفح الافتراضي
         webbrowser.open(whatsapp_link)
-        
+        print(whatsapp_link)
         
     def call_number(self, phone_number):
         platform=plat.system()
@@ -465,7 +466,7 @@ class Show_Analysis(Screen):
         if platform == 'android' or platform == 'ios':
             webbrowser.open('tel://' + formatted_phone_number)
         elif platform == 'Windows':
-            
+            print(formatted_phone_number)
             webbrowser.open('tel://' + formatted_phone_number)
         elif platform == 'Darwin':
             subprocess.call(['open', 'tel:' + formatted_phone_number])
@@ -473,8 +474,7 @@ class Show_Analysis(Screen):
             phone = 'tel://' + formatted_phone_number
             webbrowser.open(phone)
         else:
-            pass
-           
+            print("The device is not available")
 
 class WhoAreYou(Screen):
     pass
@@ -517,7 +517,7 @@ class Lab(Screen,Widget):
             
 
 
-            
+            print("Email:", email)
             
             # التحقق من أن البيانات غير فارغة
             if not self.parent.get_screen('laboratory').ids.analysis_name.text or not float(self.parent.get_screen('laboratory').ids.lab_price.text) :
@@ -534,7 +534,7 @@ class Lab(Screen,Widget):
                 "paypal_email":self.parent.get_screen('laboratory').ids.lab_payment.text
             }
             user_data = firestoree.collection('users').document(email).get().to_dict()
-            
+            print("Email:", email)
             # التحقق من وجود بيانات للمستخدم
             if user_data:
             # إنشاء قائمة للمنتجات إذا لم تكن موجودة بالفعل
@@ -548,8 +548,8 @@ class Lab(Screen,Widget):
             else:
                 firestoree.collection('users').document(email).collection('products').add(data)
            
-    
-            
+            print(email)
+            print('Product added successfully.')
             
             speaker =win.Dispatch("SAPI.SPvoice")
             speaker.Rate = -1
@@ -564,12 +564,13 @@ class Lab(Screen,Widget):
             #self.parent.current="profile"
 
         except Exception as Error:
-            pass
+            print(type(self.user_data))
            
             speaker =win.Dispatch("SAPI.SPvoice")
             speaker.Speak("Analysis not added please check data ")
             
             self.show_error_dialog("Please check data")
+            print(Error)
     
             
     def show_error_dialog(self, error_message):
@@ -607,7 +608,7 @@ class Signup_user(Screen):
                 self.manager.current = "show_lab"
         except Exception as Er:
             self.show_error_dialog("The Email is invalid")
-            
+            print(Er)
 
     def show_error_dialog(self, error_message):
         dialog = MDDialog(
@@ -660,12 +661,12 @@ class Login_admin(Screen):
                     self.parent.get_screen('laboratory').ids.lab_name.text=lab_name
                     # تعيين بيانات المستخدم في الشاشة "laboratory"
                     self.manager.get_screen('laboratory').set_user_data(user_data)
-                 
-                    
+                    print("Email:", email)
+                    print(lab_name)
                     # التبديل إلى الشاشة "laboratory"
                     self.manager.current = "profile"
                 else:
-                    pass
+                    print("Error: Screen 'laboratory' is not found")
         except requests.exceptions.HTTPError as e:
         
             self.show_error_dialog("password or email is error")
@@ -698,7 +699,7 @@ class Signup_admin(Screen):
                 "email": self.ids.email_admin.text,
                 "password": self.ids.password_admin.text,
             }
-            
+            print("Email:", data["email"])
             speaker =win.Dispatch("SAPI.SPvoice")
             speaker.Speak("The data has been stored successfully")
             # التحقق من وجود الشاشة "laboratory" قبل التبديل إليها
@@ -711,19 +712,19 @@ class Signup_admin(Screen):
                 
                 
             else:
-                pass
+                print("Error: Screen 'laboratory' is not found")
             
             # حفظ البيانات في قاعدة البيانات Firestore باستخدام المعرف العشوائي
             firestoree.collection("Admin_Email").document(email).set(data)
             
-            
+            print('Admin added successfully.')
             
             
             
             #self.parent.current = "main"
         except Exception as E:
             self.show_error_dialog("The Email is not valid")
-            
+            print(E)
 
     def show_error_dialog(self, error_message):
         dialog = MDDialog(
