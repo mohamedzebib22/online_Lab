@@ -37,17 +37,17 @@ version = 0.1
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = python3,kivy==2.1.0,kivymd==0.104.2,pillow==8.3.1,requests,firebase-admin,Pyrebase4,webbrowser
+requirements = python3,kivy,kivymd,pillow,requests,firebase-admin,Pyrebase4,webbrowser
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
 # requirements.source.kivy = ../../kivy
 
 # (str) Presplash of the application
-presplash.filename = %(source.dir)s/img/google.png
+#presplash.filename = %(source.dir)s/img/google.png
 
 # (str) Icon of the application
-icon.filename = %(source.dir)s/img/logo2.png
+#icon.filename = %(source.dir)s/img/logo2.png
 
 # (str) Supported orientation (one of landscape, sensorLandscape, portrait or all)
 orientation = portrait
